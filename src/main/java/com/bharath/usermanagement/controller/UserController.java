@@ -33,9 +33,5 @@ public class UserController {
 		return new ResponseEntity<String>(UserServiceConstants.REGISTER_SUCCESS, HttpStatus.CREATED);
 	}
 
-	@GetMapping(value = "/get")
-	public String getMethodName() {
-		return "hello word";
-
-	}
+	
 }
