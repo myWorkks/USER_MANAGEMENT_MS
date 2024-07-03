@@ -1,21 +1,25 @@
 package com.bharath.usermanagement.service.classes;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bharath.usermanagement.entity.UserDetails;
 import com.bharath.usermanagement.entity.UserType;
 import com.bharath.usermanagement.exception.UserManagementServiceException;
+import com.bharath.usermanagement.model.AuthServiceUserDetails;
 import com.bharath.usermanagement.model.RegisterUserDTO;
 import com.bharath.usermanagement.repository.UserRepository;
 import com.bharath.usermanagement.service.interfaces.UserService;
 import com.bharath.usermanagement.utility.UserServiceConstants;
 
 @Service(value = "userServiceImpl")
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService,UserDetailsService {
 
 	@Autowired
 	private UserRepository userRepository;
@@ -39,7 +43,7 @@ public class UserServiceImpl implements UserService {
 
 		}
 		saveUser(userdata);
-	//	sendNotification(userdata.getEmail(),userdata.getPhoneNumber());
+		//sendNotification(userdata.getEmail(),userdata.getPhoneNumber());
 	}
 
 
@@ -56,6 +60,15 @@ public class UserServiceImpl implements UserService {
 		newUserDetails.setUserType(userdata.getUserType());
 		newUserDetails.setUserType(UserType.USER);
 		return userRepository.save(newUserDetails);
+	}
+
+
+
+	@Override
+	public org.springframework.security.core.userdetails.UserDetails loadUserByUsername(String username)
+			throws UsernameNotFoundException {
+	Optional<UserDetails> userDetails=	userRepository.findByEmailOrPhoneNumber(username,username);
+		return userDetails.map(AuthServiceUserDetails::new ).orElseThrow(()->new UsernameNotFoundException(String.format(UserServiceConstants.USER_NOT_FOUND,username)));
 	}
 
 }

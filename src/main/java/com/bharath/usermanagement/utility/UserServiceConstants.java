@@ -9,5 +9,6 @@ public class UserServiceConstants {
 	public static final String SEND_EMAIL_PATH = "/notification/email";
 	public static final String PHONE_OR_EMAIL_MANDATORY = "PHONE NUMBER OR EMAIL IS MANDATORY";
 	public static final String PASSWORD_MANDATORY ="PASSWORD IS MANDATORY";
+	public static final String USER_NOT_FOUND = "USER WITH USERNAME : %s NOT FOUND ";
 
 }

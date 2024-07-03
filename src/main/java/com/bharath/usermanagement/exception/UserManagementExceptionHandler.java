@@ -18,5 +18,14 @@ public class UserManagementExceptionHandler {
 		errorInformation.setErrorCode(HttpStatus.BAD_REQUEST.value());
 		return new ResponseEntity<ErrorInformation>(errorInformation, HttpStatus.BAD_REQUEST);
 	}
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorInformation> handleGeneralException(Exception exception) {
+
+		ErrorInformation errorInformation = new ErrorInformation();
+		errorInformation.setErrorMessage(exception.getMessage());
+		errorInformation.setOccuredAt(LocalDateTime.now());
+		errorInformation.setErrorCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+		return new ResponseEntity<ErrorInformation>(errorInformation, HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 }
